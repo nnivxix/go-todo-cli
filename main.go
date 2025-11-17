@@ -13,6 +13,9 @@ type Todo struct {
 	Done    bool
 }
 
+var todos []Todo
+var nextId = 1
+
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	help()
@@ -27,6 +30,8 @@ func main() {
 		switch selected {
 		case "0":
 			help()
+		case "2":
+			add(reader)
 		default:
 			fmt.Println("You select wrong input")
 		}
@@ -43,4 +48,21 @@ func help() {
 	fmt.Println("3. Mark task done")
 	fmt.Println("4. Delete task")
 	fmt.Println("5. Exit")
+}
+
+func add(reader *bufio.Reader) {
+	fmt.Println("Add text: ")
+	text, _ := reader.ReadString('\n')
+	text = strings.TrimSpace(text)
+
+	// validate
+
+	id := nextId
+	todos = append(todos, Todo{
+		Id:      id,
+		Content: text,
+	})
+	nextId++
+
+	fmt.Printf("Todo Added! with content (%d:%s)\n", id, text)
 }
