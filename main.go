@@ -30,6 +30,8 @@ func main() {
 		switch selected {
 		case "0":
 			help()
+		case "1":
+			list()
 		case "2":
 			add(reader)
 		default:
@@ -48,6 +50,24 @@ func help() {
 	fmt.Println("3. Mark task done")
 	fmt.Println("4. Delete task")
 	fmt.Println("5. Exit")
+}
+
+func list() {
+	if len(todos) == 0 {
+		fmt.Println("No Todos Avalaible")
+		return
+	}
+	fmt.Println("Todos:")
+
+	for _, todo := range todos {
+		status := " "
+		if todo.Done {
+			status = "x"
+		}
+
+		fmt.Printf("[%s]%d - %s\n", status, todo.Id, todo.Content)
+	}
+
 }
 
 func add(reader *bufio.Reader) {
