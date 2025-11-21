@@ -40,6 +40,8 @@ func main() {
 			toggleMarkAsDone(reader)
 		case "4":
 			deleteTodo(reader)
+		case "5":
+			updateTodo(reader)
 		default:
 			fmt.Println("You select wrong input")
 		}
@@ -55,7 +57,8 @@ func help() {
 	fmt.Println("2. Add task")
 	fmt.Println("3. Mark task done")
 	fmt.Println("4. Delete task")
-	fmt.Println("5. Exit")
+	fmt.Println("5. Update todo")
+	fmt.Println("6. Exit")
 }
 
 func list() {
@@ -147,5 +150,36 @@ func deleteTodo(reader *bufio.Reader) {
 	}
 
 	fmt.Println("Todo not found")
+
+}
+
+func updateTodo(reader *bufio.Reader) {
+	fmt.Println("Select TODO id for Update:")
+
+	// get id
+	idStr, _ := reader.ReadString('\n')
+
+	idStr = strings.TrimSpace(idStr)
+	id, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		fmt.Println("Invalid ID")
+		return
+	}
+
+	for i := range todos {
+		if todos[i].Id == id {
+
+			fmt.Printf("Update todo for id:%d\n", id)
+
+			newContent := bufio.NewReader(os.Stdin)
+
+			content, _ := newContent.ReadString('\n')
+			todos[i].Content = content
+		} else {
+			fmt.Println("Not found")
+			// recursive
+		}
+	}
 
 }
