@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -34,6 +35,8 @@ func main() {
 			list()
 		case "2":
 			add(reader)
+		case "3":
+			toggleMarkAsDone(reader)
 		default:
 			fmt.Println("You select wrong input")
 		}
@@ -71,7 +74,7 @@ func list() {
 }
 
 func add(reader *bufio.Reader) {
-	fmt.Println("Add text: ")
+	fmt.Println("Add TODO: ")
 	text, _ := reader.ReadString('\n')
 	text = strings.TrimSpace(text)
 
@@ -85,4 +88,35 @@ func add(reader *bufio.Reader) {
 	nextId++
 
 	fmt.Printf("Todo Added! with content (%d:%s)\n", id, text)
+}
+
+func toggleMarkAsDone(reader *bufio.Reader) {
+	fmt.Println("Select TODO id")
+
+	// get id
+	idStr, _ := reader.ReadString('\n')
+	fmt.Println(idStr)
+	idStr = strings.TrimSpace(idStr)
+	id, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		fmt.Println("Invalid ID")
+		return
+	}
+
+	for i := range todos {
+		if todos[i].Id == id {
+			todos[i].Done = !todos[i].Done
+			todo := todos[i]
+			if todo.Done {
+				fmt.Printf("Todo marked as done (%d:%s)\n", todo.Id, todo.Content)
+			} else {
+				fmt.Printf("Todo marked as not done (%d:%s)\n", todo.Id, todo.Content)
+			}
+			return
+		} else {
+			fmt.Printf("Todo not found\n")
+		}
+	}
+
 }
