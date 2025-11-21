@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -37,6 +38,8 @@ func main() {
 			add(reader)
 		case "3":
 			toggleMarkAsDone(reader)
+		case "4":
+			deleteTodo(reader)
 		default:
 			fmt.Println("You select wrong input")
 		}
@@ -118,5 +121,31 @@ func toggleMarkAsDone(reader *bufio.Reader) {
 			fmt.Printf("Todo not found\n")
 		}
 	}
+
+}
+
+func deleteTodo(reader *bufio.Reader) {
+	fmt.Println("Select TODO id")
+
+	// get id
+	idStr, _ := reader.ReadString('\n')
+	fmt.Println(idStr)
+	idStr = strings.TrimSpace(idStr)
+	id, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		fmt.Println("Invalid ID")
+		return
+	}
+
+	for i := range todos {
+		if todos[i].Id == id {
+			todos = slices.Delete(todos, i, i+1)
+			fmt.Printf("Todo deleted on ID: %d \n", id)
+			return
+		}
+	}
+
+	fmt.Println("Todo not found")
 
 }
